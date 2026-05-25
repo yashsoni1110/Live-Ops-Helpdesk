@@ -2,6 +2,8 @@
 
 A real-time, highly collaborative support ticket dashboard built to solve concurrent editing race conditions in high-volume operations environments. 
 
+**🔗 Live Demo:** [live-ops-helpdesk-gamma.vercel.app](https://live-ops-helpdesk-gamma.vercel.app)
+
 This repository houses a full-stack, push-based application featuring a **Pessimistic Real-Time Lock Protocol** that completely eliminates data overwrites between support agents.
 
 ---
