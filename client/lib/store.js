@@ -1,17 +1,17 @@
 "use client";
-import { createContext, useContext, useReducer, useCallback, useEffect } from "react";
+import { createContext, useContext, useReducer, useEffect } from "react";
 
 const StoreContext = createContext(null);
 const DispatchContext = createContext(null);
 
 const initialState = {
   tickets: [],
-  locks: {},       // { [ticketId]: { agentId, agentName, avatarColor, lockedAt } }
-  agents: [],      // connected agents
-  connectionStatus: "disconnected", // "connected" | "disconnected" | "reconnecting"
+  locks: {},
+  agents: [],
+  connectionStatus: "disconnected",
   selectedTicketId: null,
-  currentAgent: null, // { agentId, agentName, avatarColor }
-  notification: null, // { type: "success"|"error"|"info", message }
+  currentAgent: null,
+  notification: null,
 };
 
 function reducer(state, action) {
@@ -38,8 +38,7 @@ function reducer(state, action) {
       };
 
     case "TICKET_CREATED":
-      // Prevent duplicates
-      if (state.tickets.find((t) => t.id === action.payload.ticket.id)) return state;
+      if (state.tickets.some((t) => t.id === action.payload.ticket.id)) return state;
       return {
         ...state,
         tickets: [action.payload.ticket, ...state.tickets],
@@ -54,20 +53,17 @@ function reducer(state, action) {
       };
 
     case "TICKET_LOCKED": {
-      const newLocks = { ...state.locks };
-      newLocks[action.payload.ticketId] = action.payload.lock;
-      return { ...state, locks: newLocks };
+      const locks = { ...state.locks, [action.payload.ticketId]: action.payload.lock };
+      return { ...state, locks };
     }
 
     case "TICKET_UNLOCKED": {
-      const newLocks = { ...state.locks };
-      delete newLocks[action.payload.ticketId];
-      return { ...state, locks: newLocks };
+      const locks = { ...state.locks };
+      delete locks[action.payload.ticketId];
+      return { ...state, locks };
     }
 
     case "AGENT_JOINED":
-      return { ...state, agents: action.payload.agents };
-
     case "AGENT_LEFT":
       return { ...state, agents: action.payload.agents };
 
@@ -96,10 +92,9 @@ export function StoreProvider({ children }) {
       const saved = localStorage.getItem("ops_agent");
       if (saved) {
         try {
-          const agent = JSON.parse(saved);
-          dispatch({ type: "SET_CURRENT_AGENT", payload: agent });
+          dispatch({ type: "SET_CURRENT_AGENT", payload: JSON.parse(saved) });
         } catch (e) {
-          console.error("Failed to parse saved agent session", e);
+          console.error("Failed to restore agent session", e);
         }
       }
     }
@@ -116,12 +111,12 @@ export function StoreProvider({ children }) {
 
 export function useStore() {
   const ctx = useContext(StoreContext);
-  if (!ctx) throw new Error("useStore must be used within StoreProvider");
+  if (!ctx) throw new Error("useStore must be inside StoreProvider");
   return ctx;
 }
 
 export function useDispatch() {
   const ctx = useContext(DispatchContext);
-  if (!ctx) throw new Error("useDispatch must be used within StoreProvider");
+  if (!ctx) throw new Error("useDispatch must be inside StoreProvider");
   return ctx;
 }

@@ -83,7 +83,7 @@ export default function CreateTicketModal({ onClose }) {
               <label className="panel-label">Customer / Company <span style={{color:"#ef4444"}}>*</span></label>
               <input
                 className="panel-input"
-                placeholder="e.g. Hargrove Steel Co."
+                placeholder="e.g. Steel Manufacturing Co."
                 value={form.customer}
                 onChange={(e) => setForm({ ...form, customer: e.target.value })}
                 required

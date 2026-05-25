@@ -1,7 +1,7 @@
-/* ═══════════════════════════════════════════════════════════════════════════
+/* ===
    RapidDispatch Live Ops Helpdesk — Global Design System
    Dark mode • Glassmorphism • Premium micro-animations
-   ═══════════════════════════════════════════════════════════════════════════ */
+   === */
 
 *,
 *::before,
@@ -62,7 +62,7 @@ body {
   overflow-x: hidden;
 }
 
-/* ── Scrollbar ────────────────────────────────────────────────────────────── */
+/* Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -80,9 +80,7 @@ body {
   background: rgba(255, 255, 255, 0.18);
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   APP SHELL
-   ═══════════════════════════════════════════════════════════════════════════ */
+/* === APP SHELL === */
 .app-main {
   display: flex;
   height: 100vh;
@@ -104,9 +102,7 @@ body {
   width: 100%;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   LOGIN MODAL
-   ═══════════════════════════════════════════════════════════════════════════ */
+/* === LOGIN MODAL === */
 .login-overlay {
   position: fixed;
   inset: 0;
@@ -343,12 +339,10 @@ body {
   transform: translateY(0);
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   BOARD
-   ═══════════════════════════════════════════════════════════════════════════ */
+/* === BOARD === */
 
 
-/* ── Board Header ─────────────────────────────────────────────────────────── */
+/* Board Header */
 .board-header {
   display: flex;
   align-items: center;
@@ -458,7 +452,7 @@ body {
   box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
 }
 
-/* ── Stats Bar ───────────────────────────────────────────────────────────── */
+/* Stats Bar */
 .stats-bar {
   display: flex;
   gap: 8px;
@@ -506,7 +500,7 @@ body {
   letter-spacing: 0.6px;
 }
 
-/* ── Controls Bar ───────────────────────────────────────────────────────────── */
+/* Controls Bar */
 /*
  * Content holder card:
  * .board-controls = TOP HALF  (search, filters) — rounded-top corners, card border
@@ -644,7 +638,7 @@ body {
   margin-left: auto;
 }
 
-/* ── Ticket List (content holder bottom half) ──────────────────────────── */
+/* Ticket List (content holder bottom half) */
 .ticket-list {
   flex: 1;
   overflow-y: auto;
@@ -676,9 +670,7 @@ body {
   font-size: 15px;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   TICKET ROW
-   ═══════════════════════════════════════════════════════════════════════════ */
+/* === TICKET ROW === */
 .ticket-row {
   position: relative;
   display: flex;
@@ -986,9 +978,7 @@ body {
   pointer-events: none;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   DETAIL PANEL
-   ═══════════════════════════════════════════════════════════════════════════ */
+/* === DETAIL PANEL === */
 .panel-backdrop {
   position: fixed;
   inset: 0;
@@ -1269,9 +1259,7 @@ body {
   box-shadow: 0 2px 12px rgba(16, 185, 129, 0.3);
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   CREATE TICKET MODAL
-   ═══════════════════════════════════════════════════════════════════════════ */
+/* === CREATE TICKET MODAL === */
 .create-modal {
   position: fixed;
   top: 50%;
@@ -1327,9 +1315,7 @@ body {
   border-top: 1px solid var(--border);
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   AGENT PRESENCE
-   ═══════════════════════════════════════════════════════════════════════════ */
+/* === AGENT PRESENCE === */
 .presence-bar {
   display: flex;
   align-items: center;
@@ -1412,9 +1398,7 @@ body {
   white-space: nowrap;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   CONNECTION BANNER
-   ═══════════════════════════════════════════════════════════════════════════ */
+/* === CONNECTION BANNER === */
 .conn-banner {
   position: fixed;
   bottom: 24px;
@@ -1490,9 +1474,9 @@ body {
   flex-shrink: 0;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
+/* ===
    SPINNERS & MISC BUTTONS
-   ═══════════════════════════════════════════════════════════════════════════ */
+   === */
 .btn-spinner {
   width: 14px;
   height: 14px;
@@ -1503,9 +1487,7 @@ body {
   flex-shrink: 0;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   KEYFRAMES
-   ═══════════════════════════════════════════════════════════════════════════ */
+/* === KEYFRAMES === */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -1548,7 +1530,7 @@ body {
   }
 }
 
-/* ── Toast Notifications ──────────────────────────────────────────────────── */
+/* Toast Notifications */
 .toast-container {
   position: fixed;
   top: 24px;
@@ -1626,14 +1608,14 @@ body {
   }
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
+/* ===
    RESPONSIVE — 3-LEVEL BREAKPOINT SYSTEM
    • ≤1024px  Compact desktop / small laptop (typical split-screen scenario)
    • ≤768px   Tablet / narrow window
    • ≤480px   Mobile / very narrow
-   ═══════════════════════════════════════════════════════════════════════════ */
+   === */
 
-/* ── Compact desktop: split-screen, small laptop ─────────────────────────── */
+/* Compact desktop: split-screen, small laptop */
 @media (max-width: 1024px) {
 
   /* Header */
@@ -1682,7 +1664,7 @@ body {
   }
 }
 
-/* ── Tablet / narrow window ──────────────────────────────────────────────── */
+/* Tablet / narrow window */
 @media (max-width: 768px) {
 
   /* Header */
@@ -1780,7 +1762,7 @@ body {
   }
 }
 
-/* ── Mobile / very narrow ────────────────────────────────────────────────── */
+/* Mobile / very narrow */
 @media (max-width: 480px) {
 
   /* Header */

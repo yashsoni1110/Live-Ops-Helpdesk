@@ -7,26 +7,20 @@ export function useSocketEvents() {
   const dispatch = useDispatch();
   const { currentAgent } = useStore();
   const joinedRef = useRef(false);
-  // Always-current ref so socket callbacks never close over a stale currentAgent
   const currentAgentRef = useRef(currentAgent);
-  currentAgentRef.current = currentAgent; // sync on every render, no useEffect needed
+  currentAgentRef.current = currentAgent;
 
   useEffect(() => {
     const socket = getSocket();
 
-    // ── Connection events ──────────────────────────────────────────────────
     function onConnect() {
-      console.log("[SOCKET] Connected:", socket.id);
       dispatch({ type: "SET_CONNECTION_STATUS", payload: "connected" });
-      // Re-join if we already have an agent identity (reconnect / server restart)
-      // Use ref to avoid the stale closure over the null captured on mount
       if (currentAgentRef.current && joinedRef.current) {
         socket.emit("join", currentAgentRef.current);
       }
     }
 
     function onDisconnect(reason) {
-      console.log("[SOCKET] Disconnected:", reason);
       dispatch({ type: "SET_CONNECTION_STATUS", payload: "disconnected" });
     }
 
@@ -34,7 +28,6 @@ export function useSocketEvents() {
       dispatch({ type: "SET_CONNECTION_STATUS", payload: "reconnecting" });
     }
 
-    // Named references so they can be properly removed from socket.io manager
     function onReconnectAttempt() {
       dispatch({ type: "SET_CONNECTION_STATUS", payload: "reconnecting" });
     }
@@ -49,7 +42,6 @@ export function useSocketEvents() {
     socket.io.on("reconnect_attempt", onReconnectAttempt);
     socket.io.on("reconnect", onReconnect);
 
-    // ── App events ─────────────────────────────────────────────────────────
     socket.on("initial_state", (payload) => {
       dispatch({ type: "INITIAL_STATE", payload });
     });
@@ -83,18 +75,16 @@ export function useSocketEvents() {
         type: "SET_NOTIFICATION",
         payload: {
           type: "error",
-          message: `Ticket is already locked by ${lockedBy.agentName}`,
+          message: `Locked by ${lockedBy.agentName}`,
         },
       });
     });
 
-    // Connect
     if (!socket.connected) {
       socket.connect();
     }
 
     return () => {
-      // Clean up socket listeners
       socket.off("connect", onConnect);
       socket.off("disconnect", onDisconnect);
       socket.off("connect_error", onConnectError);
@@ -106,7 +96,6 @@ export function useSocketEvents() {
       socket.off("agent_joined");
       socket.off("agent_left");
       socket.off("lock_denied");
-      // Clean up socket.io manager listeners (these were the leak)
       socket.io.off("reconnect_attempt", onReconnectAttempt);
       socket.io.off("reconnect", onReconnect);
     };
