@@ -67,6 +67,24 @@ The application's theme is defined completely in plain, highly optimized CSS var
 
 ---
 
+## 🛠️ Technology Stack
+
+OpsCenter is constructed utilizing a highly optimized, dependency-light technology stack designed for high throughput and sub-millisecond latency:
+
+### Frontend
+- **React 19 & Next.js 16 (App Router)**: Leverages Next.js's optimized compilation pipelines, automatic font optimizations, and Turbopack rendering engines.
+- **Socket.io-client**: Persistent TCP WebSocket client with custom heartbeat pings, automatic exponent reconnection curves, and clean listener teardowns.
+- **State Management**: Built on custom React Context Providers utilizing `useReducer` state engines. Persists active sessions and themes in `localStorage` for immediate hydration.
+- **Vanilla CSS (Design Tokens)**: Pure CSS custom variables that support complete runtime theme switching (Light Mode $\leftrightarrow$ Dark Mode) with zero dependency styling overhead.
+
+### Backend
+- **Node.js & Express**: Provides an asynchronous, single-threaded runtime environment for lightning-fast API responses and health status telemetry.
+- **Socket.io (Server)**: Manages concurrent WebSocket secure connections, handling client handshakes, broadcast operations, and event triggers.
+- **Memory Map Stores**: Uses native high-performance JS `Map` tables for in-memory session listings and locking tokens, completely bypassing DB latency locks.
+- **UUID v4**: Used for cryptographically secure, connection-independent session and ticket identifiers.
+
+---
+
 ## 📂 Repository Layout
 
 ```text
