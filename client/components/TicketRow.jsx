@@ -34,7 +34,7 @@ function timeAgo(iso) {
   return `${Math.floor(hrs / 24)}d ago`;
 }
 
-export default function TicketRow({ ticket, isNew }) {
+export default function TicketRow({ ticket, isNew, index = 0 }) {
   const { locks, currentAgent, selectedTicketId } = useStore();
   const dispatch = useDispatch();
 
@@ -47,7 +47,7 @@ export default function TicketRow({ ticket, isNew }) {
   const status = STATUS_CONFIG[ticket.status] || STATUS_CONFIG.open;
 
   function handleClick() {
-    if (isLockedByOther) return; // Cannot open a locked ticket
+    if (isLockedByOther) return;
     dispatch({ type: "SELECT_TICKET", payload: ticket.id });
   }
 
@@ -69,16 +69,15 @@ export default function TicketRow({ ticket, isNew }) {
       ]
         .filter(Boolean)
         .join(" ")}
+      style={{ animationDelay: `${index * 0.05}s` }}
       onClick={handleClick}
       role="button"
       tabIndex={isLockedByOther ? -1 : 0}
       onKeyDown={(e) => e.key === "Enter" && !isLockedByOther && handleClick()}
       aria-label={`Ticket ${ticket.ticketNumber}: ${ticket.subject}`}
     >
-      {/* Priority stripe */}
       <div className="ticket-stripe" style={{ backgroundColor: priority.dot }} />
 
-      {/* Main content */}
       <div className="ticket-main">
         <div className="ticket-header-row">
           <div className="ticket-meta">
@@ -124,7 +123,6 @@ export default function TicketRow({ ticket, isNew }) {
         </div>
       </div>
 
-      {/* Lock overlay / actions */}
       <div className="ticket-right">
         {isLockedByOther && (
           <div className="ticket-lock-info">

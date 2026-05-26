@@ -18,10 +18,10 @@ const io = new Server(server, {
   pingInterval: 25000,
 });
 
-// In-memory DB
-const agents = new Map(); // socketId -> agent
-const locks = new Map();  // ticketId -> lockInfo
-const tickets = new Map(); // ticketId -> ticket
+
+const agents = new Map();
+const locks = new Map();
+const tickets = new Map();
 
 let ticketCounter = 10421;
 
@@ -103,7 +103,7 @@ const SEED_TICKETS = [
   },
 ];
 
-// Load initial seed
+
 SEED_TICKETS.forEach((t) => {
   tickets.set(t.id, t);
   const num = parseInt(t.ticketNumber.replace("LH-", ""), 10);
@@ -116,7 +116,7 @@ app.get("/health", (req, res) => {
   res.json({ ok: true, tickets: tickets.size, agents: agents.size });
 });
 
-// helpers
+
 function getTicketsArray() {
   return Array.from(tickets.values()).sort(
     (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
@@ -138,7 +138,7 @@ function getAgentsArray() {
 io.on("connection", (socket) => {
   console.log(`Socket connected: ${socket.id}`);
 
-  // Handle agent joining ops room
+
   socket.on("join", ({ agentId, agentName, avatarColor }) => {
     agents.set(socket.id, {
       agentId,
@@ -160,7 +160,7 @@ io.on("connection", (socket) => {
     });
   });
 
-  // Lock a ticket
+
   socket.on("lock_ticket", ({ ticketId }) => {
     const agent = agents.get(socket.id);
     if (!agent) return;
@@ -181,7 +181,7 @@ io.on("connection", (socket) => {
     io.emit("ticket_locked", { ticketId, lock: lockInfo });
   });
 
-  // Unlock a ticket
+
   socket.on("unlock_ticket", ({ ticketId }) => {
     const agent = agents.get(socket.id);
     if (!agent) return;
@@ -195,7 +195,7 @@ io.on("connection", (socket) => {
     io.emit("ticket_unlocked", { ticketId });
   });
 
-  // Create ticket
+
   socket.on("create_ticket", ({ subject, priority, customer, customerEmail, category, description }) => {
     const agent = agents.get(socket.id);
     if (!agent) return;
@@ -220,7 +220,7 @@ io.on("connection", (socket) => {
     io.emit("ticket_created", { ticket: newTicket });
   });
 
-  // Update ticket details
+
   socket.on("update_ticket", ({ ticketId, updates }, ack) => {
     const agent = agents.get(socket.id);
     if (!agent) return;
@@ -247,7 +247,7 @@ io.on("connection", (socket) => {
     if (typeof ack === "function") ack({ ok: true });
   });
 
-  // Disconnect & cleanup
+
   socket.on("disconnect", (reason) => {
     const agent = agents.get(socket.id);
     if (!agent) return;

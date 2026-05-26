@@ -42,7 +42,7 @@ export default function TicketBoard() {
     dispatch({ type: "CLOSE_TICKET" });
   }
 
-  // Track which tickets just arrived so the slide-in animation fires
+
   const prevTicketIdsRef = useRef(null);
   useEffect(() => {
     const currentIds = new Set(tickets.map((t) => t.id));
@@ -57,7 +57,7 @@ export default function TicketBoard() {
           added.forEach((id) => next.add(id));
           return next;
         });
-        // Remove highlight after animation completes (1 s matches CSS keyframe)
+
         const timer = setTimeout(() => {
           setNewTicketIds((prev) => {
             const next = new Set(prev);
@@ -71,7 +71,7 @@ export default function TicketBoard() {
     prevTicketIdsRef.current = currentIds;
   }, [tickets]);
 
-  // Stats
+
   const stats = useMemo(() => ({
     total: tickets.length,
     open: tickets.filter((t) => t.status === "open").length,
@@ -79,7 +79,7 @@ export default function TicketBoard() {
     locked: Object.keys(locks).length,
   }), [tickets, locks]);
 
-  // Filtered + sorted tickets
+
   const filtered = useMemo(() => {
     let list = [...tickets];
     if (statusFilter !== "all") list = list.filter((t) => t.status === statusFilter);
@@ -102,7 +102,7 @@ export default function TicketBoard() {
 
   return (
     <div className="board">
-      {/* ── Header ── */}
+
       <header className="board-header">
         <div className="board-header-left">
           <div className="board-logo">
@@ -151,31 +151,31 @@ export default function TicketBoard() {
         </div>
       </header>
 
-      {/* ── Stats Bar ── */}
+
       <div className="stats-bar">
-        <div className="stat-card">
+        <div className="stat-card" style={{ animationDelay: '0.1s' }}>
           <p className="stat-value">{stats.total}</p>
           <p className="stat-label">Total Tickets</p>
         </div>
-        <div className="stat-card stat-card--open">
+        <div className="stat-card stat-card--open" style={{ animationDelay: '0.2s' }}>
           <p className="stat-value" style={{ color: "#6366f1" }}>{stats.open}</p>
           <p className="stat-label">Open</p>
         </div>
-        <div className="stat-card stat-card--critical">
+        <div className="stat-card stat-card--critical" style={{ animationDelay: '0.3s' }}>
           <p className="stat-value" style={{ color: "#ef4444" }}>{stats.critical}</p>
           <p className="stat-label">Critical</p>
         </div>
-        <div className="stat-card stat-card--locked">
+        <div className="stat-card stat-card--locked" style={{ animationDelay: '0.4s' }}>
           <p className="stat-value" style={{ color: "#f59e0b" }}>{stats.locked}</p>
           <p className="stat-label">🔒 Locked</p>
         </div>
-        <div className="stat-card">
+        <div className="stat-card" style={{ animationDelay: '0.5s' }}>
           <p className="stat-value" style={{ color: "#10b981" }}>{agents.length}</p>
           <p className="stat-label">Agents Online</p>
         </div>
       </div>
 
-      {/* ── Filters + Search ── */}
+
       <div className="board-controls">
         <div className="search-bar">
           <svg className="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -236,7 +236,7 @@ export default function TicketBoard() {
         <span className="results-count">{filtered.length} result{filtered.length !== 1 ? "s" : ""}</span>
       </div>
 
-      {/* ── Ticket List ── */}
+
       <div className="ticket-list" id="ticket-list">
         {filtered.length === 0 ? (
           <div className="empty-state">
@@ -253,11 +253,12 @@ export default function TicketBoard() {
             </button>
           </div>
         ) : (
-          filtered.map((ticket) => (
+          filtered.map((ticket, index) => (
             <TicketRow
               key={ticket.id}
               ticket={ticket}
               isNew={newTicketIds.has(ticket.id)}
+              index={index}
             />
           ))
         )}

@@ -1,7 +1,8 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { useStore, useDispatch } from "@/lib/store";
 import { getSocket } from "@/lib/socket";
+import { useTicketLock } from "@/lib/useTicketLock";
 
 const STATUS_OPTIONS = [
   { value: "open", label: "Open" },
@@ -30,18 +31,24 @@ export default function TicketDetailPanel() {
   const { tickets, locks, selectedTicketId, currentAgent } = useStore();
   const dispatch = useDispatch();
   const [form, setForm] = useState(null);
-  const [saving, setSaving] = useState(false);
-  const [saved, setSaved] = useState(false);
   const panelRef = useRef(null);
-  // Ref so the Escape keydown listener always has the current handleClose (fixes stale closure)
-  const handleCloseRef = useRef(null);
 
   const ticket = tickets.find((t) => t.id === selectedTicketId);
   const lock = ticket ? locks[ticket.id] : null;
   const isLockedByMe = lock && currentAgent && lock.agentId === currentAgent.agentId;
   const isLockedByOther = lock && currentAgent && lock.agentId !== currentAgent.agentId;
 
-  // When ticket opens — emit lock and seed form
+  const onUnlock = useCallback(() => {
+    dispatch({ type: "CLOSE_TICKET" });
+  }, [dispatch]);
+
+  const { handleClose, handleSave, saving, saved, setSaved } = useTicketLock(
+    ticket,
+    currentAgent,
+    isLockedByMe,
+    onUnlock
+  );
+
   useEffect(() => {
     if (!ticket) return;
     setForm({
@@ -52,61 +59,7 @@ export default function TicketDetailPanel() {
       assignedTo: ticket.assignedTo || "",
     });
     setSaved(false);
-
-    // Acquire lock
-    const socket = getSocket();
-    socket.emit("lock_ticket", { ticketId: ticket.id });
-  }, [ticket?.id]);
-
-  function handleClose() {
-    if (ticket) {
-      const socket = getSocket();
-      socket.emit("unlock_ticket", { ticketId: ticket.id });
-    }
-    dispatch({ type: "CLOSE_TICKET" });
-  }
-
-  // Keep the ref in sync so the Escape listener never closes over a stale ticket
-  handleCloseRef.current = handleClose;
-
-  function handleSave() {
-    if (!ticket || !isLockedByMe || !form) return;
-    setSaving(true);
-    const socket = getSocket();
-
-    // Use acknowledgment callback: unlock fires only after server confirms the update
-    socket.emit(
-      "update_ticket",
-      {
-        ticketId: ticket.id,
-        updates: {
-          subject: form.subject,
-          status: form.status,
-          priority: form.priority,
-          description: form.description,
-          assignedTo: form.assignedTo,
-        },
-      },
-      () => {
-        // Server has processed the update — now safe to release the lock
-        socket.emit("unlock_ticket", { ticketId: ticket.id });
-        setSaving(false);
-        setSaved(true);
-        setTimeout(() => {
-          dispatch({ type: "CLOSE_TICKET" });
-        }, 800);
-      }
-    );
-  }
-
-  // Close on Escape — uses a ref so the listener is never stale
-  useEffect(() => {
-    function onKey(e) {
-      if (e.key === "Escape") handleCloseRef.current?.();
-    }
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, []); // empty deps — the ref always stays current, no re-subscription needed
+  }, [ticket, setSaved]);
 
   if (!ticket) return null;
 
@@ -121,7 +74,6 @@ export default function TicketDetailPanel() {
     <>
       <div className="panel-backdrop" onClick={handleClose} />
       <aside className="detail-panel" ref={panelRef} role="dialog" aria-label="Ticket Detail">
-        {/* Header */}
         <div className="panel-header">
           <div className="panel-title-row">
             <div className="panel-ticket-num" style={{ color: priorityColor }}>
@@ -134,7 +86,6 @@ export default function TicketDetailPanel() {
             </button>
           </div>
 
-          {/* Lock status banner */}
           {isLockedByOther && (
             <div className="panel-lock-banner panel-lock-banner--other">
               <span>🔒</span>
@@ -149,9 +100,7 @@ export default function TicketDetailPanel() {
           )}
         </div>
 
-        {/* Body */}
         <div className="panel-body">
-          {/* Subject */}
           <div className="panel-field">
             <label className="panel-label">Subject</label>
             {isLockedByMe ? (
@@ -166,7 +115,6 @@ export default function TicketDetailPanel() {
             )}
           </div>
 
-          {/* Customer info */}
           <div className="panel-row-two">
             <div className="panel-field">
               <label className="panel-label">Customer</label>
@@ -178,7 +126,6 @@ export default function TicketDetailPanel() {
             </div>
           </div>
 
-          {/* Status + Priority */}
           <div className="panel-row-two">
             <div className="panel-field">
               <label className="panel-label">Status</label>
@@ -214,13 +161,12 @@ export default function TicketDetailPanel() {
             </div>
           </div>
 
-          {/* Category */}
+
           <div className="panel-field">
             <label className="panel-label">Category</label>
             <p className="panel-value">{ticket.category || "—"}</p>
           </div>
 
-          {/* Description */}
           <div className="panel-field">
             <label className="panel-label">Description / Resolution Notes</label>
             {isLockedByMe ? (
@@ -236,7 +182,6 @@ export default function TicketDetailPanel() {
             )}
           </div>
 
-          {/* Assigned To */}
           <div className="panel-field">
             <label className="panel-label">Assigned To</label>
             {isLockedByMe ? (
@@ -251,7 +196,6 @@ export default function TicketDetailPanel() {
             )}
           </div>
 
-          {/* Tags */}
           {ticket.tags && ticket.tags.length > 0 && (
             <div className="panel-field">
               <label className="panel-label">Tags</label>
@@ -263,7 +207,6 @@ export default function TicketDetailPanel() {
             </div>
           )}
 
-          {/* Timestamps */}
           <div className="panel-timestamps">
             <span>Created {timeAgo(ticket.createdAt)}</span>
             <span>·</span>
@@ -271,7 +214,6 @@ export default function TicketDetailPanel() {
           </div>
         </div>
 
-        {/* Footer actions */}
         <div className="panel-footer">
           <button className="panel-btn panel-btn--ghost" onClick={handleClose}>
             Close

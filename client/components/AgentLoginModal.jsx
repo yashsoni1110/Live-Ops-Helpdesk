@@ -53,7 +53,7 @@ export default function AgentLoginModal() {
   return (
     <div className="login-overlay">
       <div className="login-card">
-        {/* Logo area */}
+
         <div className="login-logo">
           <div className="login-logo-icon">
             <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
@@ -74,7 +74,7 @@ export default function AgentLoginModal() {
           real-time across all connected agents.
         </p>
 
-        {/* Quick login presets */}
+
         <div className="login-presets">
           <p className="login-preset-label">Quick login (for demo):</p>
           <div className="login-preset-row">

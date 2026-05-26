@@ -80,9 +80,7 @@ export function useSocketEvents() {
       });
     });
 
-    if (!socket.connected) {
-      socket.connect();
-    }
+
 
     return () => {
       socket.off("connect", onConnect);

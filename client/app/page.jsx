@@ -1,28 +1,18 @@
 "use client";
+import dynamic from "next/dynamic";
 import { useStore } from "@/lib/store";
-import { useSocketEvents } from "@/lib/useSocketEvents";
 import AgentLoginModal from "@/components/AgentLoginModal";
-import TicketBoard from "@/components/TicketBoard";
-import TicketDetailPanel from "@/components/TicketDetailPanel";
-import ConnectionBanner from "@/components/ConnectionBanner";
-import Toast from "@/components/Toast";
+
+const LiveOpsApp = dynamic(() => import("@/components/LiveOpsApp"), { ssr: false });
 
 function AppContent() {
-  const { currentAgent, selectedTicketId } = useStore();
-  useSocketEvents();
+  const { currentAgent } = useStore();
 
   if (!currentAgent) {
     return <AgentLoginModal />;
   }
 
-  return (
-    <main className="app-main">
-      <TicketBoard />
-      {selectedTicketId && <TicketDetailPanel />}
-      <ConnectionBanner />
-      <Toast />
-    </main>
-  );
+  return <LiveOpsApp />;
 }
 
 export default function Home() {

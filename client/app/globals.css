@@ -1,7 +1,4 @@
-/* ===
-   RapidDispatch Live Ops Helpdesk — Global Design System
-   Dark mode • Glassmorphism • Premium micro-animations
-   === */
+
 
 *,
 *::before,
@@ -12,49 +9,55 @@
 }
 
 :root {
-  --bg-base: #080d1a;
-  --bg-surface: #0e1428;
-  --bg-card: #121929;
-  --bg-card-hover: #16203a;
-  --bg-elevated: #1a2540;
-  --bg-input: #0d1525;
+  --bg-base: #030014;
+  --bg-surface: rgba(14, 20, 40, 0.6);
+  --bg-card: rgba(18, 25, 41, 0.7);
+  --bg-card-hover: rgba(22, 32, 58, 0.85);
+  --bg-elevated: rgba(26, 37, 64, 0.85);
+  --bg-input: rgba(13, 21, 37, 0.6);
 
-  --border: rgba(255, 255, 255, 0.06);
-  --border-strong: rgba(255, 255, 255, 0.12);
+  --border: rgba(255, 255, 255, 0.05);
+  --border-strong: rgba(255, 255, 255, 0.1);
 
-  --text-primary: #f0f4ff;
-  --text-secondary: #8896b3;
-  --text-muted: #4b5a73;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
 
-  --accent: #6366f1;
-  --accent-hover: #7577f5;
-  --accent-glow: rgba(99, 102, 241, 0.25);
-  --accent-subtle: rgba(99, 102, 241, 0.08);
+  --accent: #818cf8;
+  --accent-hover: #6366f1;
+  --accent-glow: rgba(99, 102, 241, 0.4);
+  --accent-subtle: rgba(99, 102, 241, 0.15);
 
   --green: #10b981;
-  --green-bg: rgba(16, 185, 129, 0.10);
+  --green-bg: rgba(16, 185, 129, 0.15);
   --yellow: #f59e0b;
-  --yellow-bg: rgba(245, 158, 11, 0.10);
+  --yellow-bg: rgba(245, 158, 11, 0.15);
   --red: #ef4444;
-  --red-bg: rgba(239, 68, 68, 0.10);
+  --red-bg: rgba(239, 68, 68, 0.15);
 
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 16px;
-  --radius-xl: 20px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
 
-  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.3);
-  --shadow-panel: -8px 0 40px rgba(0, 0, 0, 0.5);
-  --shadow-float: 0 20px 60px rgba(0, 0, 0, 0.6);
+  --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-panel: -10px 0 50px rgba(0, 0, 0, 0.6);
+  --shadow-float: 0 20px 40px -5px rgba(0, 0, 0, 0.4), 0 8px 16px -4px rgba(0, 0, 0, 0.3);
 
-  --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-slow: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-slow: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  --font-heading: 'Plus Jakarta Sans', sans-serif;
+  --font-heading-stack: var(--font-heading), sans-serif;
+  --font-inter: 'Inter', -apple-system, BlinkMacSystemFont;
+  --font-mono: 'JetBrains Mono', monospace;
 }
 
 html,
 body {
   height: 100%;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-inter), sans-serif;
   background-color: var(--bg-base);
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
@@ -62,7 +65,6 @@ body {
   overflow-x: hidden;
 }
 
-/* Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -80,17 +82,23 @@ body {
   background: rgba(255, 255, 255, 0.18);
 }
 
-/* === APP SHELL === */
 .app-main {
   display: flex;
   height: 100vh;
   overflow: hidden;
-  background:
-    radial-gradient(ellipse 80% 60% at 50% -20%, rgba(99, 102, 241, 0.12) 0%, transparent 60%),
-    var(--bg-base);
+  background-color: var(--bg-base);
+  background-image: 
+    radial-gradient(ellipse 60% 80% at 20% -10%, rgba(129, 140, 248, 0.15), transparent),
+    radial-gradient(ellipse 60% 80% at 80% 110%, rgba(16, 185, 129, 0.1), transparent),
+    radial-gradient(ellipse 40% 40% at 50% 50%, rgba(99, 102, 241, 0.05), transparent);
+  animation: bg-shift 20s infinite alternate ease-in-out;
 }
 
-/* Board max-width cap for ultrawide displays */
+@keyframes bg-shift {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 100% 100%; }
+}
+
 .board {
   flex: 1;
   display: flex;
@@ -102,7 +110,6 @@ body {
   width: 100%;
 }
 
-/* === LOGIN MODAL === */
 .login-overlay {
   position: fixed;
   inset: 0;
@@ -152,9 +159,10 @@ body {
 }
 
 .login-title {
-  font-size: 26px;
-  font-weight: 700;
-  letter-spacing: -0.5px;
+  font-family: var(--font-heading-stack);
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.8px;
   margin-bottom: 8px;
 }
 
@@ -339,10 +347,6 @@ body {
   transform: translateY(0);
 }
 
-/* === BOARD === */
-
-
-/* Board Header */
 .board-header {
   display: flex;
   align-items: center;
@@ -350,7 +354,8 @@ body {
   padding: 16px 24px;
   border-bottom: 1px solid var(--border);
   background: var(--bg-surface);
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   flex-shrink: 0;
   gap: 16px;
 }
@@ -366,10 +371,11 @@ body {
 }
 
 .board-brand {
-  font-size: 16px;
-  font-weight: 700;
+  font-family: var(--font-heading-stack);
+  font-size: 18px;
+  font-weight: 800;
   color: var(--text-primary);
-  letter-spacing: -0.3px;
+  letter-spacing: -0.5px;
 }
 
 .board-sub {
@@ -452,7 +458,6 @@ body {
   box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
 }
 
-/* Stats Bar */
 .stats-bar {
   display: flex;
   gap: 8px;
@@ -477,11 +482,14 @@ body {
   text-align: center;
   border: 1px solid var(--border);
   transition: var(--transition);
+  animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .stat-card:hover {
   background: var(--bg-card-hover);
-  border-color: var(--border-strong);
+  border-color: var(--accent-subtle);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
 
 .stat-value {
@@ -500,13 +508,6 @@ body {
   letter-spacing: 0.6px;
 }
 
-/* Controls Bar */
-/*
- * Content holder card:
- * .board-controls = TOP HALF  (search, filters) — rounded-top corners, card border
- * .ticket-list    = BOTTOM HALF (list)          — rounded-bottom corners, no top border
- * Together they form one unified card that floats above the dark board bg.
- */
 .board-controls {
   display: flex;
   align-items: center;
@@ -515,7 +516,6 @@ body {
   flex-shrink: 0;
   flex-wrap: wrap;
 
-  /* Card top — content holder */
   margin: 16px 24px 0;
   background: var(--bg-card);
   border: 1px solid var(--border-strong);
@@ -638,7 +638,6 @@ body {
   margin-left: auto;
 }
 
-/* Ticket List (content holder bottom half) */
 .ticket-list {
   flex: 1;
   overflow-y: auto;
@@ -647,7 +646,6 @@ body {
   flex-direction: column;
   gap: 6px;
 
-  /* Card bottom — content holder */
   margin: 0 24px 16px;
   background: var(--bg-surface);
   border: 1px solid var(--border-strong);
@@ -670,25 +668,26 @@ body {
   font-size: 15px;
 }
 
-/* === TICKET ROW === */
 .ticket-row {
   position: relative;
   display: flex;
   align-items: stretch;
   background: var(--bg-card);
+  backdrop-filter: blur(16px);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   overflow: hidden;
   cursor: pointer;
   transition: var(--transition);
   min-height: 80px;
+  animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .ticket-row:hover {
   background: var(--bg-card-hover);
   border-color: var(--border-strong);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-card);
+  transform: translateY(-2px) scale(1.005);
+  box-shadow: var(--shadow-float);
 }
 
 .ticket-row:focus {
@@ -696,7 +695,6 @@ body {
   outline-offset: 2px;
 }
 
-/* Locked by other agent */
 .ticket-row--locked {
   background: rgba(10, 15, 30, 0.6);
   opacity: 0.75;
@@ -709,18 +707,15 @@ body {
   background: rgba(10, 15, 30, 0.6);
 }
 
-/* Locked by me */
 .ticket-row--mine {
   border-color: var(--accent);
   box-shadow: 0 0 0 1px var(--accent), 0 4px 20px var(--accent-glow);
 }
 
-/* Selected */
 .ticket-row--selected {
   border-color: var(--accent);
 }
 
-/* New ticket animation */
 .ticket-row--new {
   animation: slideInNew 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -737,14 +732,12 @@ body {
   }
 }
 
-/* Priority stripe */
 .ticket-stripe {
   width: 4px;
   flex-shrink: 0;
   border-radius: 4px 0 0 4px;
 }
 
-/* Ticket main body */
 .ticket-main {
   flex: 1;
   padding: 14px 16px;
@@ -770,11 +763,11 @@ body {
 }
 
 .ticket-number {
-  font-size: 11px;
+  font-family: var(--font-mono), monospace;
+  font-size: 13px;
   font-weight: 700;
   color: var(--text-muted);
   letter-spacing: 0.5px;
-  font-family: 'JetBrains Mono', monospace;
 }
 
 .ticket-priority-badge {
@@ -864,7 +857,6 @@ body {
   border: 1px solid var(--border);
 }
 
-/* Ticket right section */
 .ticket-right {
   display: flex;
   align-items: center;
@@ -978,7 +970,6 @@ body {
   pointer-events: none;
 }
 
-/* === DETAIL PANEL === */
 .panel-backdrop {
   position: fixed;
   inset: 0;
@@ -1259,7 +1250,6 @@ body {
   box-shadow: 0 2px 12px rgba(16, 185, 129, 0.3);
 }
 
-/* === CREATE TICKET MODAL === */
 .create-modal {
   position: fixed;
   top: 50%;
@@ -1315,7 +1305,6 @@ body {
   border-top: 1px solid var(--border);
 }
 
-/* === AGENT PRESENCE === */
 .presence-bar {
   display: flex;
   align-items: center;
@@ -1398,7 +1387,6 @@ body {
   white-space: nowrap;
 }
 
-/* === CONNECTION BANNER === */
 .conn-banner {
   position: fixed;
   bottom: 24px;
@@ -1474,9 +1462,6 @@ body {
   flex-shrink: 0;
 }
 
-/* ===
-   SPINNERS & MISC BUTTONS
-   === */
 .btn-spinner {
   width: 14px;
   height: 14px;
@@ -1487,14 +1472,19 @@ body {
   flex-shrink: 0;
 }
 
-/* === KEYFRAMES === */
 @keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUpFade {
   from {
     opacity: 0;
+    transform: translateY(20px);
   }
-
   to {
     opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -1530,7 +1520,6 @@ body {
   }
 }
 
-/* Toast Notifications */
 .toast-container {
   position: fixed;
   top: 24px;
@@ -1608,17 +1597,8 @@ body {
   }
 }
 
-/* ===
-   RESPONSIVE — 3-LEVEL BREAKPOINT SYSTEM
-   • ≤1024px  Compact desktop / small laptop (typical split-screen scenario)
-   • ≤768px   Tablet / narrow window
-   • ≤480px   Mobile / very narrow
-   === */
-
-/* Compact desktop: split-screen, small laptop */
 @media (max-width: 1024px) {
 
-  /* Header */
   .board-header {
     padding: 12px 18px;
     gap: 10px;
@@ -1632,7 +1612,6 @@ body {
     font-size: 15px;
   }
 
-  /* Stats: reduce padding + font so 5 cards stay in one row */
   .stats-bar {
     padding: 10px 18px;
     gap: 6px;
@@ -1651,7 +1630,6 @@ body {
     letter-spacing: 0.4px;
   }
 
-  /* Content holder */
   .board-controls {
     margin: 12px 18px 0;
     padding: 10px 14px;
@@ -1664,10 +1642,8 @@ body {
   }
 }
 
-/* Tablet / narrow window */
 @media (max-width: 768px) {
 
-  /* Header */
   .board-header {
     padding: 10px 14px;
     flex-wrap: wrap;
@@ -1687,18 +1663,15 @@ body {
     display: none;
   }
 
-  /* avatar-only badge */
   .create-btn {
     padding: 8px 12px;
     font-size: 12px;
   }
 
-  /* Presence */
   .presence-count {
     display: none;
   }
 
-  /* Stats: compact single-row */
   .stats-bar {
     padding: 8px 14px;
     gap: 5px;
@@ -1721,7 +1694,6 @@ body {
     white-space: nowrap;
   }
 
-  /* Content holder */
   .board-controls {
     margin: 10px 14px 0;
     padding: 8px 12px;
@@ -1733,7 +1705,6 @@ body {
     flex: 1 1 100%;
   }
 
-  /* search takes full row */
   .results-count {
     display: none;
   }
@@ -1743,7 +1714,6 @@ body {
     padding: 6px 8px 24px;
   }
 
-  /* Ticket rows */
   .ticket-right {
     min-width: 110px;
   }
@@ -1752,7 +1722,6 @@ body {
     display: none;
   }
 
-  /* Detail panel: full width */
   .detail-panel {
     width: 100vw;
   }
@@ -1762,10 +1731,8 @@ body {
   }
 }
 
-/* Mobile / very narrow */
 @media (max-width: 480px) {
 
-  /* Header */
   .board-header {
     padding: 8px 10px;
   }
@@ -1789,7 +1756,6 @@ body {
     gap: 4px;
   }
 
-  /* Stats: very tight */
   .stats-bar {
     padding: 6px 10px;
     gap: 4px;
@@ -1808,7 +1774,6 @@ body {
     font-size: 8px;
   }
 
-  /* Content holder */
   .board-controls {
     margin: 8px 10px 0;
     padding: 6px 10px;
@@ -1819,7 +1784,6 @@ body {
     padding: 6px 6px 20px;
   }
 
-  /* Ticket rows */
   .ticket-right {
     min-width: 80px;
     padding: 0 10px;
@@ -1837,7 +1801,6 @@ body {
     display: none;
   }
 
-  /* Controls */
   .board-controls {
     padding: 6px 10px;
   }
